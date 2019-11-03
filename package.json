@@ -1,0 +1,30 @@
+{
+  "name": "electron-quick-start",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron --enable-transparent-visuals ."
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^7.0.0",
+    "eslint": "^6.6.0"
+  },
+  "dependencies": {
+    "dompurify": "^2.0.7",
+    "marked": "^0.7.0",
+    "socket.io-client": "^2.3.0",
+    "timeago.js": "^4.0.1",
+    "vue": "^2.6.10"
+  }
+}

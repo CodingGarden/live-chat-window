@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--
+      TODO:
+        * acknowledge message
+        * List of aesthetic things, streamlabs follow center text white and no background nor img. and mods have a mod icon in the top left or end of the name.
+        * https://api.flixel.com/2/flixels/?gallery_name=nature&page_size=50 // make a screen saver
+        * Play drawful with people!!
+     -->
+     <!-- you should definitely make.. Mark as read if message is older than X minutes
+ -->
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Montserrat&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: rgba(0, 0, 0, 0);
+        border: none;
+        /* font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.5rem;
+      }
+
+      body::-webkit-scrollbar { display: none; }
+
+      .message {
+        color: white;
+        background: tomato;
+        margin: 0.5rem;
+        border-radius: 20px;
+        padding: 1rem;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .author {
+        display: flex;
+        font-size: 1rem;
+        align-items: center;
+      }
+
+      .author img {
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        margin-bottom: 0.25rem;
+      }
+
+      .author .name {
+        margin-left: 0.5rem;
+        font-size: 1.2rem;
+        word-break: break-all;
+        font-family: 'Fira Sans', sans-serif;
+      }
+
+      .message .content {
+        padding: 0.25rem;
+        flex: 5;
+        /* word-break: break-all; */
+        overflow-wrap: break-word;
+        display: block;
+      }
+
+      .message .content textarea {
+        width: 100%;
+        font-size: 1.5rem;
+        font-family: 'Courier New', Courier, monospace;
+      }
+
+      .message.youtube {
+        background: #95190CEE;
+      }
+
+      .message.twitch {
+        background: #392F5AEE;
+      }
+
+      .time-sent {
+        font-size: 0.75rem;
+        text-align: right;
+        display: block;
+      }
+
+      p {
+        margin: 0;
+        padding: 0;
+      }
+
+      .bottom-bar {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .button {
+        margin: 0.25rem;
+        cursor: pointer;
+      }
+
+      a, a:visited {
+        color: #E6AF2E;
+      }
+
+      .messages-item {
+        transition: all 500ms ease-in;
+      }
+
+      .messages-move {
+        transition: transform 250ms;
+      }
+
+      .messages-enter-active, .messages-leave-active {
+        transition: all 500ms ease-in;
+      }
+
+      .messages-enter, .messages-leave-to {
+        opacity: 0;
+        transform: translateY(-200px) translateX(600px);
+      }
+
+      .star {
+        display: none;
+      }
+
+      .moderator .star {
+        display: block;
+        margin-left: 0.5rem;
+        color: #FFB700;
+      }
+
+      .moderator .name {
+        color: #22DE1F;
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+  </head>
+  <body style="-webkit-app-region: drag">
+      <!-- could the existing messages slide downwards instead of teleporting? -->
+    <transition-group 
+      class="messages"
+      name="messages"
+      tag="div"
+      id="messages"
+      style="-webkit-app-region: drag"
+    >
+      <div class="message messages-item" v-for="message in messages" :class="message.platform" :key="message.id">
+        <span 
+          class="author"
+          :class="{
+            moderator: authors[message.channelId].isChatModerator
+          }"
+        >
+          <img :src="authors[message.channelId].profileImageUrl" >
+          <span class="name">{{authors[message.channelId].displayName}}</span>
+          <!-- 💚 Thank you ShiDotMoe!!! -->
+          <span class="star">★</span>
+        </span>
+        <span class="content" v-html="message.sanitized"></span>
+        <span class="content" v-if="message.showSource">
+          <textarea rows="3" disabled>{{message.message}}</textarea>
+        </span>
+        <div class="bottom-bar">
+          <div v-if="message.isPotentiallyNaughty" class="button" @click="message.showSource = !message.showSource">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          </div>
+          <div v-else></div>
+          <small class="time-sent">{{message.timesent}}</small>
+        </div>
+      </div>
+    </transition-group>
+    <script type="module" src="./renderer.js"></script>
+  </body>
+</html>
