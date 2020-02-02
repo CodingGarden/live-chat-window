@@ -1,15 +1,12 @@
 const API_URL = 'http://localhost:5000';
 // TODO: get id dynamically
-const id = 'Cg0KCzJQcVF2bnFzcWNnKicKGFVDTE5ndV9PdXB3b2VFU2d0YWIzM0NDdxILMlBxUXZucXNxY2c';
+const id =
+  'Cg0KCzJQcVF2bnFzcWNnKicKGFVDTE5ndV9PdXB3b2VFU2d0YWIzM0NDdxILMlBxUXZucXNxY2c';
 
 function sanitize(message) {
   message.sanitized = marked(
     DOMPurify.sanitize(message.message, {
-      FORBID_ATTR: [
-        'style',
-        'onerror',
-        'onload',
-      ],
+      FORBID_ATTR: ['style', 'onerror', 'onload'],
       FORBID_TAGS: [
         'table',
         'script',
@@ -20,8 +17,8 @@ function sanitize(message) {
         'textarea',
         'frame',
         'frameset'
-      ],
-    }),
+      ]
+    })
   );
 }
 
@@ -40,7 +37,7 @@ new Vue({
   el: '#messages',
   data: {
     messages: [],
-    authors: {},
+    authors: {}
   },
   async created() {
     this.loadMessages();
@@ -55,18 +52,23 @@ new Vue({
     async loadMessages() {
       const [messages, authors] = await Promise.all([
         fetch(`${API_URL}/messages?id=${id}`).then(res => res.json()),
-        fetch(`${API_URL}/authors?id=${id}`).then(res => res.json()),
+        fetch(`${API_URL}/authors?id=${id}`).then(res => res.json())
       ]);
       console.log(messages, authors);
       const messageIds = new Set();
-      this.messages = messages.reduceRight((all, message) => {
-        if (!messageIds.has(message.id) && !message.message.startsWith('!drop')) {
-          all.push(message);
-          processMessage(message);
-          messageIds.add(message.id);
-        }
-        return all;
-      }, []).slice(0, 100);
+      this.messages = messages
+        .reduceRight((all, message) => {
+          if (
+            !messageIds.has(message.id) &&
+            !message.message.startsWith('!drop')
+          ) {
+            all.push(message);
+            processMessage(message);
+            messageIds.add(message.id);
+          }
+          return all;
+        }, [])
+        .slice(0, 100);
       this.authors = authors;
 
       setInterval(() => {
@@ -84,7 +86,7 @@ new Vue({
       this.messages = [...newMessages, ...this.messages];
     },
     addLatestAuthors(data) {
-      data.forEach((author) => {
+      data.forEach(author => {
         this.$set(this.authors, author.channelId, author);
       });
     }
