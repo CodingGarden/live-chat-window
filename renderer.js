@@ -2,6 +2,12 @@ const API_URL = 'http://localhost:5000';
 // TODO: get id dynamically
 const id = 'Cg0KCzJQcVF2bnFzcWNnKicKGFVDTE5ndV9PdXB3b2VFU2d0YWIzM0NDdxILMlBxUXZucXNxY2c';
 
+const commands = [
+  "!drop",
+  "!c4"
+];
+const commandsRegex = new RegExp("^("+commands.join('|')+")"); 
+
 function sanitize(message) {
   message.sanitized = marked(
     DOMPurify.sanitize(message.message, {
@@ -23,6 +29,10 @@ function sanitize(message) {
       ],
     }),
   );
+}
+
+function hideCommands(message) {
+  return commandsRegex.test(message);
 }
 
 function setTimesent(message) {
@@ -60,7 +70,7 @@ new Vue({
       console.log(messages, authors);
       const messageIds = new Set();
       this.messages = messages.reduceRight((all, message) => {
-        if (!messageIds.has(message.id) && !message.message.startsWith('!drop')) {
+        if (!messageIds.has(message.id) && !hideCommands(message.message)) {
           all.push(message);
           processMessage(message);
           messageIds.add(message.id);
@@ -75,7 +85,7 @@ new Vue({
     },
     addLatestMessages(data) {
       const newMessages = data.reduce((all, message) => {
-        if (!message.message.startsWith('!drop')) {
+        if (!hideCommands(message.message)) {
           processMessage(message);
           all.push(message);
         }
