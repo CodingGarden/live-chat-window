@@ -11,8 +11,8 @@
      -->
   <!-- you should definitely make.. Mark as read if message is older than X minutes
  -->
-  <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Montserrat&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Montserrat&display=swap" rel="stylesheet" />
   <style>
     body {
       margin: 0;
@@ -86,11 +86,11 @@
     }
 
     .message.youtube {
-      background: #95190CEE;
+      background: #95190cee;
     }
 
     .message.twitch {
-      background: #392F5AEE;
+      background: #392f5aee;
     }
 
     .time-sent {
@@ -117,7 +117,7 @@
 
     a,
     a:visited {
-      color: #E6AF2E;
+      color: #e6af2e;
     }
 
     .messages-item {
@@ -146,7 +146,7 @@
     .moderator .star {
       display: block;
       margin-left: 0.5rem;
-      color: #FFB700;
+      color: #ffb700;
     }
 
     .member .name {
@@ -154,7 +154,7 @@
     }
 
     .moderator .name {
-      color: #22DE1F;
+      color: #22de1f;
     }
 
     .delete-button {
@@ -175,7 +175,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
 </head>
 
-<body style="-webkit-app-region: drag">
+<body style="-webkit-app-region: drag" v-on:click="handleClick">
   <!-- could the existing messages slide downwards instead of teleporting? -->
   <transition-group class="messages" name="messages" tag="div" id="messages" style="-webkit-app-region: drag">
     <div class="message messages-item" v-for="message in messages" :class="message.platform" :key="message.id">
@@ -192,7 +192,7 @@
             member: message.author.isChatSponsor,
           }">
         <div class="avatar">
-          <img :src="message.author.profileImageUrl">
+          <img :src="message.author.profileImageUrl" />
           <span class="member-badge" v-if="message.author.isChatSponsor">
             <img src="https://qna.coding.garden/logo.png" />
           </span>
