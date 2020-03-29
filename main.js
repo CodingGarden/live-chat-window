@@ -9,6 +9,7 @@ let mainWindow;
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    closable: true,
     width: 640,
     height: 1080,
     frame: false,
@@ -53,6 +54,18 @@ app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') app.quit();
+});
+
+app.on('web-contents-created', (e, contents) => {
+  console.log('we did it');
+  contents.on('will-navigate', (event, url) => {
+    event.preventDefault();
+    console.log('blocked navigate:', url);
+  });
+  contents.on('new-window', async (event, url) => {
+    event.preventDefault();
+    console.log('blocked window:', url);
+  });
 });
 
 app.on('activate', function () {
