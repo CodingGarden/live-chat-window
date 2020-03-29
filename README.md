@@ -12,3 +12,9 @@ npm start
 ```
 
 ![preview](https://i.imgur.com/t4edTlG.png)
+
+
+## TODO
+
+* disable images/embedding for twitch accounts that were created less than 24 hours ago?
+
