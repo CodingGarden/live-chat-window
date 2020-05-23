@@ -1,14 +1,16 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+let highlightWindow;
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    title: 'Live Chat',
     closable: true,
     width: 640,
     height: 1080,
@@ -21,7 +23,6 @@ function createWindow () {
     minimizable: false,
     maximizable: false,
     // alwaysOnTop: true,
-    closable: false,
     backgroundColor: '#00FFFFFF',
     // type: 'desktop',
     webPreferences: {
@@ -44,6 +45,46 @@ function createWindow () {
   });
 }
 
+function createHighlightWindow (message) {
+  if (highlightWindow) {
+    return;
+  }
+  // Create the browser window.
+  highlightWindow = new BrowserWindow({
+    title: 'Highlight Chat',
+    closable: true,
+    width: 1000,
+    height: 320,
+    frame: false,
+    x: 10,
+    y: 1080 - 300,
+    hasShadow: false,
+    transparent: true,
+    titleBarStyle: 'customButtonsOnHover',
+    minimizable: false,
+    maximizable: false,
+    alwaysOnTop: true,
+    backgroundColor: '#00FFFFFF',
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
+  });
+
+  // and load the index.html of the app.
+  highlightWindow.loadFile('highlight.html');
+
+  // Open the DevTools.
+  // mainWindow.webContents.openDevTools()
+
+  // Emitted when the window is closed.
+  highlightWindow.on('closed', function () {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    highlightWindow = null;
+  });
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -57,7 +98,6 @@ app.on('window-all-closed', function () {
 });
 
 app.on('web-contents-created', (e, contents) => {
-  console.log('we did it');
   contents.on('will-navigate', (event, url) => {
     event.preventDefault();
     console.log('blocked navigate:', url);
@@ -74,9 +114,9 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow();
 });
 
-app.on('before-quit', () => {
-  mainWindow.setClosable(true);
-});
-
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.on('highlightMessage', (message) => {
+  createHighlightWindow();
+});

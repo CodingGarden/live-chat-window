@@ -4,7 +4,7 @@ A simple transparent electron window to display latest messages from the [live-c
 
 ## Setup
 
-Update the `liveChatId` in renderer.js with the live stream ID from youtube.
+> index.html and renderer.js contain CodingGarden specific reward ids and bot userids, update accordingly
 
 ```sh
 npm install
@@ -12,9 +12,3 @@ npm start
 ```
 
 ![preview](https://i.imgur.com/t4edTlG.png)
-
-
-## TODO
-
-* disable images/embedding for twitch accounts that were created less than 24 hours ago?
-

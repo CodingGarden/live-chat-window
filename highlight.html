@@ -6,22 +6,26 @@
   <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Montserrat&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
-  <title>Live Chat</title>
+  <style>
+    .messages-enter,
+    .messages-leave-to {
+      opacity: 0;
+      transform: translateX(-1080px);
+    }
+  </style>
+  <title>Highlight Chat</title>
 </head>
 
 <body style="-webkit-app-region: drag">
-  <div id="app" v-cloak>
-    <div class="input-wrapper">
-      <input ref="input" v-if="showSearch" v-model="filter" class="search-input">
-    </div>
+  <div id="app" v-cloak ref="app">
     <transition-group class="messages" :class="{ focus }" name="messages" tag="div" id="messages" style="-webkit-app-region: drag">
-      <div class="message messages-item" v-for="message in filteredMessages"
+      <div class="message messages-item" v-for="message in messages"
         :class="{
           [message.platform]: true,
           highlight: message.highlighted,
           follow: message.follow,
         }" :style="{ background: message.bgColor || '' }" :key="message.id">
-        <div class="button delete-button" @click="removeMessage(message)">
+        <div class="button delete-button" @click="clearHighlight()">
           <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
             stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
             <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon>
@@ -56,8 +60,7 @@
           <textarea rows="3" disabled>{{message.message}}</textarea>
         </span>
         <div class="bottom-bar">
-          <div class="buttons">
-            <svg @click="highlightMessage(message)" class="button" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+          <div>
             <div v-if="!message.reward && message.isPotentiallyNaughty" class="button" @click="message.showSource = !message.showSource">
               <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
                 stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
@@ -71,7 +74,7 @@
       </div>
     </transition-group>
   </div>
-<script type="module" src="./renderer.js"></script>
+<script type="module" src="./highlight.js"></script>
 </body>
 
 </html>
