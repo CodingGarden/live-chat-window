@@ -1,4 +1,4 @@
-@import './fontawesome-free-5.13.0-web/css/brands.min.css';
+@import '.node_modules/@fortawesome/fontawesome-free/css/brands.min.css';
 
 [v-cloak] { display: none; }
 
