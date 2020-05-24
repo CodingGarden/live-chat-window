@@ -99,6 +99,9 @@
       }
     },
     methods: {
+      toggleShowCountry(message) {
+        this.$set(message, 'showCountry', !message.showCountry);
+      },
       highlightMessage(message) {
         localStorage.highlightedMessage = JSON.stringify(message);
         window.highlightMessage();
@@ -120,7 +123,7 @@
           fetch(`${API_URL}/messages?id=${id}`).then(res => res.json()),
           fetch(`${API_URL}/authors?id=${id}`).then(res => res.json()),
         ]);
-        this.messages = messages.reduceRight((all, message) => {
+        const allMessages = messages.reduceRight((all, message) => {
             if (message.author.channelId === this.botId && message.message.includes('Focus mode ended')) {
               this.focus = false;
             }
@@ -141,8 +144,9 @@
           .filter(m => !localStorage[`delete-${m.id}`])
           .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
           .slice(0, 500);
+          
+        this.messages = allMessages;
         this.authors = authors;
-
         setInterval(() => {
           this.messages.forEach(setTimesent);
         }, 1000);

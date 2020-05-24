@@ -1,4 +1,6 @@
+@import './node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css';
 @import './node_modules/@fortawesome/fontawesome-free/css/brands.min.css';
+@import './node_modules/flag-icon-css/css/flag-icon.min.css';
 
 [v-cloak] { display: none; }
 
@@ -72,7 +74,6 @@ body::-webkit-scrollbar {
   width: auto;
   border-radius: 0;
   margin-left: 6px;
-  color: white;
 }
 
 .author .name {
@@ -225,4 +226,19 @@ img.badge.vip {
 
 .buttons {
   display: flex;
+}
+
+i.team-badge {
+  font-size: 1.5rem;
+}
+
+.country {
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
+.country-name {
+  font-size: 1rem;
+  font-style: italic;
+  opacity: 0.5;
 }
